@@ -1,0 +1,70 @@
+
+// ON OFF
+#include <lpc214x.h> // Include the LPC214x header file 
+void delay() 
+{ 
+unsigned int j; 
+for(j=0;j<10000;j++); // Simple delay function, loops 10000 times for a delay. } 
+int main() 
+{ 
+PINSEL0 = 0x00000000; // Configure PINSEL0 
+PINSEL1 = 0x00000000; // Configure PINSEL1 
+IODIR0 = 0x000FF000; // Set bits 12 to 19 of IODIR0 as outputs. 
+while(1) 
+{ 
+IOSET0 = 0x000FF000; // Set the selected output pins high. 
+delay(); // Call the delay function 
+IOCLR0 = 0x000FF000; // Clear the selected output pins low. 
+delay(); // Call the delay function 
+} 
+return 0; 
+}
+
+
+
+
+#include<LPC214x.h> 
+void delay (unsigned int time) 
+{ 
+unsigned int i,j; 
+for(i=0; i<time; i++) { 
+for(j=0; j<1500; j++); 
+} 
+} 
+int main() 
+{
+PINSEL0 = 0X00000000; 
+PINSEL1 = 0X00000000; 
+IODIR0 = 0X000FF000; 
+while(1) { 
+unsigned int k; 
+IOSET0 = 0X00000000; 
+for(k=0; k<8; k++) { 
+IOSET0 = 0X000C0000>>k ; 
+delay(1000); 
+IOCLR0 = 0X000C0000>>k ; 
+delay(1000); 
+} 
+} 
+}
+
+
+
+#include<LPC214x.h> 
+void delay (unsigned int time) { 
+unsigned int i,j; 
+for(i=0; i<time; i++) { 
+for(j=0; j<1500; j++); 
+} 
+} 
+int main() 
+{ 
+PINSEL0 = 0X00000000; PINSEL1 = 0X00000000; IODIR0 = 0X000FF000; 
+while(1) { 
+unsigned int k; 
+IOSET0 = 0X00000000; for(k=0; k<8; k++) { 
+IOSET0 = 0X00080000>>k ; delay(1000); 
+IOCLR0 = 0X00080000>>k ; delay(1000); 
+} 
+} 
+}
