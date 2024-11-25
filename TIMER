@@ -21,6 +21,16 @@ ms_delay(1000);
 }
 
 
+
+
+
+
+
+
+
+
+
+
 #include<lpc214x.h> //fosc
 void ms_delay(unsigned int miliseconds) 
 { 
