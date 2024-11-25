@@ -1,0 +1,30 @@
+SQUARE WAVEFORM
+#include <lpc214x.h>
+#define DACPinMask 1<<19   // Mask for DAC pin (P0.19)
+#define datamask 0x0000FFC0 // Data mask for DAC value
+#define datashift 6         // Bit shift value for DAC data
+
+// Function to create a delay using nested loops.
+void delay(unsigned int n){
+    for(int i=0; i<n; i++){
+        for(int j=0; j<10000; j++){
+            // Delay loop for generating time intervals.
+        }
+    }
+}
+
+void DACinit(){
+    PINSEL1 |= DACPinMask; // Set P0.19 as DAC output
+    DACR = 1 << 16;  // Enable DAC output
+}
+
+int main(){
+    DACinit(); // Initialize DAC
+
+    while(1){
+        DACR = 0x00000000; // Set DAC data to 0 (0V)
+        delay(1000);      // Delay for a specified time
+        DACR = 0x0000FFC0; // Set DAC data to maximum (3.3V)
+        delay(1000);      // Delay for a specified time
+    }
+}
