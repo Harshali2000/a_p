@@ -31,22 +31,3 @@ ms_delay(1000);
 
 
 
-#include<lpc214x.h> //fosc
-void ms_delay(unsigned int miliseconds) 
-{ 
-T0PR=14999; 
-T0TC= 0; 
-T0TCR=0X01; 
-while(T0TC < miliseconds); 
-T0TCR= 0x00; 
-} int main() 
-
-{ PINSEL2= 0x00000000;
-	IODIR1= 0xff000000; 
-	while(1) 
-		{ IOSET1=0xff000000; 
-			ms_delay(1000); 
-			IOCLR1=0xff000000;
-ms_delay(1000); 
-} 
-} 
