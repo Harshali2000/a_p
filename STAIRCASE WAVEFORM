@@ -1,0 +1,39 @@
+
+STAIRCASE WAVEFORM:-
+#include <lpc214x.h>
+#define dacpinmask 1<<19       // Mask for DAC pin (P0.19)
+#define datamask 0x0000FFC0    // Data mask for DAC value
+#define datashift 6            // Bit shift value for DAC data
+
+// Function to create a delay using nested loops.
+void delay(unsigned int n){
+    for(int i=0; i<n; i++){
+        for(int j=0; j<5000; j++){
+            // Delay loop for generating time intervals.
+        }
+    }
+}
+
+// Function to initialize the DAC pins and settings.
+void dacinit(){
+    PINSEL1 |= dacpinmask; // Set P0.19 as DAC output
+    DACR = 1 << 16;        // Enable DAC output
+}
+
+int main(){
+    dacinit(); // Initialize DAC
+
+    while(1){
+        // Generate an increasing staircase waveform.
+        for(int i=0; i<1023; i=i+204){
+            DACR = (datamask & (i << datashift)); // Set DAC data to the current value
+            delay(1000);  // Delay for a specified time
+        }
+        
+        // Generate a decreasing staircase waveform.
+        for(int i=1023; i>0; i=i-204){
+            DACR = (datamask & (i << datashift)); // Set DAC data to the current value
+            delay(1000);                          // Delay for a specified time
+        }
+    }
+}
