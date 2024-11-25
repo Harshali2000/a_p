@@ -23,7 +23,6 @@ for (i = 0; a[i] != '\0'; i++) {
 if (a[i] == '\n') {
 
 while (!(U0LSR & 0x20))
-
 U0THR = 0x0D;
 }
 U0THR = a[i];
@@ -34,7 +33,6 @@ delay(500);
 return 0;
 
 }
-
 
 RECEVIER
 #include <lpc214x.h>
@@ -70,3 +68,32 @@ delay(500);
 }
 while (1);
 }
+
+1.For showcasing 1 letter (TRANSMISSION) 
+#include<lpc214x.h> 
+int main() 
+{ PINSEL0=0x00000005;
+U0FCR=0x07;
+U0LCR=0x83;
+U0DLM=0x00;
+U0DLL=0x62;
+U0LCR=0x03; 
+U0THR='Y'; 
+return 0; }
+
+
+2. For showcasing 1 letter (RECEIVER) 
+#include<lpc214x.h> (RECEIVER) 
+int main() 
+{ unsigned char x;
+PINSEL0=0x00000005;
+U0FCR=0x07;
+U0LCR=0x83; 
+U0DLM=0x00;
+U0DLL=0x62;
+U0LCR=0x03; 
+while(!(U0LSR & 0X01));
+x = U0RBR; 
+while(!(U0LSR & 0x20)); 
+ U0THR = x; 
+return 0; }
