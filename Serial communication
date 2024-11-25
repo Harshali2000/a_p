@@ -1,0 +1,72 @@
+Transmission
+#include <lpc214x.h> // Include the necessary header file for LPC214x microcontroller
+unsigned char a[25] = "\n Nandini and Harshali";
+void delay(unsigned int n) {
+for (unsigned int i = 0; i < n; i++) {
+for (unsigned int j = 0; j < 1000; j++) {
+}
+}
+}
+void UART_initialize() {
+PINSEL0 |= 0x00000005;
+U0FCR = 0x07;
+U0LCR = 0x83;
+U0DLL = 0x62;
+U0DLM = 0x00;
+U0LCR = 0x03;
+}
+int main() {
+UART_initialize();
+unsigned char i, revdata;
+
+for (i = 0; a[i] != '\0'; i++) {
+if (a[i] == '\n') {
+
+while (!(U0LSR & 0x20))
+
+U0THR = 0x0D;
+}
+U0THR = a[i];
+while (!(U0LSR & 0x20));
+delay(500);
+}while(1);
+
+return 0;
+
+}
+
+
+RECEVIER
+#include <lpc214x.h>
+unsigned char a[25] = "\nNandini and Harshali";
+void delay(unsigned int n) {
+for (unsigned int i = 0; i < n; i++) {
+for (unsigned int j = 0; j < 1000; j++) {
+}
+}
+}
+void initialize() {
+PINSEL0 |= 0x00000005;
+U0FCR = 0x07;
+U0LCR = 0x83;
+U0DLL = 0x62;
+U0DLM = 0x00;
+U0LCR = 0x03;
+}
+int main() {
+initialize();
+unsigned char i, revdata;
+while (!(U0LSR & 0x01));
+revdata = U0RBR;
+while (!(U0LSR & 0x20));
+U0THR = revdata;
+for (i = 0; a[i] != '\0'; i++) {
+if (a[i] == '\n') {
+U0THR = 0x0D;
+}
+while (!(U0LSR & 0x20));
+U0THR = a[i];
+delay(500);
+}
+while (1);
+}
