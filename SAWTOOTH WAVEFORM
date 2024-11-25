@@ -1,0 +1,15 @@
+#include<lpc214x.h>
+#define shift 6
+#define mask 0x0000FFC0 //putting 1 for 5-16 bits only 
+void dac_init() 
+	{
+		PINSEL1 |=1<<19; //pin 19 only of pinsel1 
+		DACR=1<<16; //BIAS
+		} int main()
+ { unsigned int i; 
+ dac_init(); 
+ while(1)
+ { for(i=0;i<1024;i++)
+ { DACR=(i<<shift)& mask; } }
+ return 0; 
+ }
