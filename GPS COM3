@@ -1,0 +1,64 @@
+#include "lpc214x.h" //COM3
+#include "stdio.h"
+#include "string.h"
+#include "uart_f3.c"
+
+void delay(unsigned int t)
+{
+for(int i=0; i<t; i++)
+{for(int j=0; j<5000; j++);}
+}
+
+int main()
+{
+unsigned char temp;
+Uart0init();
+Uart1init();
+// printf("GPS Program");
+while(1)
+{
+while((Uart1_Getchar()) != '$');
+while((Uart1_Getchar()) != 'R');
+while((Uart1_Getchar()) != 'C');
+
+Uart1_Getchar(); //','
+//printf("Time: ");
+do{
+temp = Uart1_Getchar();
+Uart0_Putchar(temp);
+} while(temp != 0X2C);// till next comma
+while((Uart1_Getchar()) != 'A');
+while((Uart1_Getchar()) != 'N');
+Uart1_Getchar(); //','
+do{
+temp = Uart1_Getchar();
+Uart0_Putchar(temp);
+} while(temp != 0X2C);
+
+}
+return 0;
+}
+
+
+//uart_f3.c
+#include "lpc214x.h" 
+unsigned char Uart0_Putchar(unsigned char ch)
+{
+if(ch=='\n')
+{
+while(!(U0LSR & 0X20));
+U0THR=0X0D;
+}
+while(!(U0LSR & 0X20));
+return(U0THR=ch);
+}
+
+
+
+
+
+
+
+
+
+
