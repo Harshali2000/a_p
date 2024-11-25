@@ -1,0 +1,88 @@
+on off
+#include<lpc214x.h>		// INCLUDING HEADER FILE void delay(int t)	// DELAY FUNCTION
+{
+unsigned int i,j; for(i=0;i<5000;i++)
+{
+for(j=0;j<i;j++);
+}
+}
+
+
+int main()
+{
+PINSEL2=0x00000000;	// configuring pinsel2 for GPIO(general purpose i/p)
+
+IODIR1=0xFF000000;	//setting bits	to	of IODIR1 as o/ps
+{
+IOSET1=0xFF000000;	//set the selected o/p pins high delay(5000);
+IOCLR1=0xFF000000;	// clear the selected o/p pins low delay(5000);
+}
+return 0;
+}
+
+alternate
+#include<lpc214x.h>		// INCLUDING HEADER FILE void delay(int t)	// DELAY FUNCTION
+{
+unsigned int i,j; for(i=0;i<2000;i++)
+{
+for(j=0;j<i;j++);
+}
+}
+
+int main()
+{
+PINSEL2=0x00000000; IODIR1=0xFF000000;
+while(1)
+{
+IOSET1=0xAA000000; //set selected o/p pins high
+ 
+delay(50000);
+IOCLR1=0xAA000000; // clear the same set of selected o/p pins low delay(50000);
+IOSET1=0x55000000; // set new o/p pins delay(50000);
+IOCLR1=0x55000000; // clear the new set delay(50000);
+}
+return 0;}
+
+ LED right shift pattern :
+
+#include<lpc214x.h> 
+void delay (int t)
+{ unsigned int i , j ; 
+for(i=0 ; i<3000 ; i++)
+{ for( j=0 ; j<i ; j++); } 
+} int main()
+{ unsigned int i; 
+PINSEL2=0x00000000; 
+IODIR1=0xFF000000; 
+for(i=0;i<7;i+=1)
+{ IOSET1=0xC0000000>>(i);
+delay(5000);
+IOCLR1=0xC0000000>>(i);
+delay(5000); } 
+return 0; }
+
+
+
+4. LED left shift pattern
+#include<lpc214x.h> 
+void delay (int t)
+{ unsigned int i , j ;
+for(i=0 ; i<3000 ; i++)
+{ for( j=0 ; j<i ; j++);
+} 
+} 
+int main() 
+{ unsigned int i;
+
+PINSEL2=0x00000000; 
+IODIR1=0xFF000000; 
+while(1) { 
+for(i=0;i<8;i+=2) 
+{ IOSET1=0x03000000<<(i); 
+delay(50000);
+IOCLR1=0x03000000<<(i);
+delay(50000); 
+}
+}
+return 0;
+}
