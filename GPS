@@ -52,6 +52,16 @@ U0THR=0X0D;
 while(!(U0LSR & 0X20));
 return(U0THR=ch);
 }
+
+
+
+
+
+
+
+
+
+
 //FOC
 unsigned char Uart1_Getchar(void)
 {
