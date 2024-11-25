@@ -1,0 +1,36 @@
+TRIANGLE WAVEFORM:- 
+#include "lpc214x.h"
+#define DAC_PinMask 1<<19
+#define DAC_DataMask 0x0000FFC0
+#define DataShift 6
+
+void delay(unsigned int time){
+unsigned int i,j;
+for(i=0;i<time;i++)
+for(j=0;j<5000;j++);
+}
+
+void DAC_init(void)
+{
+	PINSEL1 |= DAC_PinMask;
+	DACR |= 1<<16;
+}
+
+int main(void)
+{
+	int i; 
+	DAC_init();					//initialise dac interface
+	while(1)
+	{
+		for(i=0;i<1024;i++)										//send data to DAC
+		{
+			DACR = (DAC_DataMask & (i<<DataShift));				
+		}
+		for(i=1023;i>0;i--)											//send data to DAC
+		{
+			DACR = (DAC_DataMask & (i<<DataShift));
+			
+		}
+	}
+	return 0;
+}
