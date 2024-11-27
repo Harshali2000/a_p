@@ -1,0 +1,99 @@
+#include "lpc214x.h"  				// Include the LPC214x header file.
+#define LCD_Port 0x00FF0000  	// The port used for the LCD.
+#define EN 1 << 31 						// Enable signal bit.
+#define RS 1 << 27 						// Register select signal bit.
+#define CS1 1 << 26 					// Chip select 1 signal bit.
+#define CS2 1 << 25 					// Chip select 2 signal bit.
+#define GRST 1 << 30  				// Graphics reset signal bit.
+#define RW 1 << 24 						// Read/Write signal bit.
+#define LCD_Shift 16 					// Shift value for LCD operations.
+
+unsigned char pic[1024]={};
+unsigned char pic1[1024]={};
+unsigned char pic2[1024]={};
+void delay(unsigned int time)
+{ int i,j;
+    for(i=0;i<time;i++)
+        for(j=0;j<10;j++);
+}
+void ldelay(unsigned int time)
+{
+    int i,j;
+for(i=0;i<time;i++)
+   for(j=0;j<5000;j++);
+}
+
+void LCD_strobe(void)
+{
+ IO1SET = EN;
+ delay(5);
+ IO1CLR = EN;
+ delay(5);
+ }
+ void GLCD_data(unsigned char ch)
+ {
+   IO1CLR =LCD_Port;
+   IO1SET = ch<<LCD_Shift;
+   IO1SET = RS;
+   LCD_strobe();  
+}
+
+void GLCD_cmd(unsigned char ch)
+ {
+   IO1CLR =LCD_Port;
+   IO1SET = ch<<LCD_Shift;
+   IO1CLR = RS;
+   LCD_strobe();  
+}
+void GLCD_init()
+{
+   int i;
+   PINSEL0 =0;
+   PINSEL1 = 0;
+   PINSEL2 = 0;
+   
+   IODIR1= LCD_Port | RS | EN | CS1 | CS2 | GRST | RW;
+   
+   IOSET1 =GRST |CS1 | CS2;
+   IOCLR1= RW | RS | EN;
+   
+   for(i=0;i<10;i++)
+   GLCD_cmd(0x3F);
+   GLCD_cmd(0x40);
+   GLCD_cmd(0xB8);
+   }
+   
+   void GLCD_disp(unsigned char *temp1)
+   {
+   int i,j;
+   for(i=0; i<8;i++)
+   {
+     IO1SET = CS1;
+IO1CLR = CS2;
+GLCD_cmd(0xB8 | i);
+GLCD_cmd(0x40);
+for(j=0;j<64;j++)
+GLCD_data(temp1[(i*128)+j]);
+
+IO1SET = CS2;
+IO1CLR = CS1;
+GLCD_cmd(0xB8 | i);
+GLCD_cmd(0x40);
+for(j=64;j<128;j++)
+GLCD_data(temp1[(i*128)+j]);
+}}
+
+int main()
+{
+GLCD_init();
+
+while(1)
+{
+  GLCD_disp(pic);
+  ldelay(2000);
+	GLCD_disp(pic1);
+  ldelay(2000);
+  GLCD_disp(pic2);
+  ldelay(2000);
+}
+}
