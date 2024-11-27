@@ -1,5 +1,3 @@
-‭.‬ For‭ displaying 1 img‬
-
 ‭#include<lpc214x.h>‬
 
 ‭#define LCD_Port 0x00FF0000‬
@@ -293,5 +291,10 @@ glcd‭_display(temp);‬
 
 ‭}‬
 
-return 0;‬
- }‬‭
+‭return 0;‬
+ 
+}‬‭
+
+
+
+
